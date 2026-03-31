@@ -2,8 +2,8 @@ Algoritmo SistemaEventos
 	
     Definir opcion, i, totalEventos Como Entero
 	//La variable i es un índice
-    Definir nombreEvento, ubicacion Como Cadena
-    Definir capacidadMax Como Entero
+    Definir nombreEvento, ubicacion, eventos, ubicaciones Como Cadena
+    Definir capacidadMax, capacidades, asistentes, estados Como Entero
     
     // Arreglos
     Dimension eventos[10]
@@ -29,7 +29,31 @@ Algoritmo SistemaEventos
         
         Segun opcion Hacer
 			1:
-                // CREAR EVENTO
+                Escribir "==============================";
+				Escribir "         CREAR EVENTO         ";
+				Escribir "==============================";
+				
+				Si totalEventos < 10 Entonces
+					totalEventos <- totalEventos + 1; 
+					
+					Escribir "Nombre del evento:";
+					Leer eventos[totalEventos]; 
+					
+					Escribir "Ubicación del evento:";
+					Leer ubicaciones[totalEventos];
+					
+					Escribir "Capacidad maxima de personas:";
+					Leer capacidades[totalEventos];
+					
+					Escribir "";
+					Escribir "Evento registrado con éxito";
+				SiNo
+					Escribir "¡Error! Ha alcanzado el límite máximo de 10 eventos.";
+				FinSi
+				
+				Escribir "";
+				Escribir "Presione una tecla para regresar al menú...";
+				Esperar Tecla;
                 
                 
             2:
@@ -38,8 +62,27 @@ Algoritmo SistemaEventos
                 
                 
             3:
-                // MOSTRAR EVENTOS
-                // VALIDAR SI HAY EVENTOS
+                Escribir "===============================";
+				Escribir "            EVENTOS            ";
+				Escribir "===============================";
+				
+				Si totalEventos = 0 Entonces
+					Escribir "No hay ningún evento programado actualmente.";
+				SiNo
+					Escribir "Los eventos disponibles son:";
+					Escribir "";
+					
+					Para i <- 1 Hasta totalEventos Con Paso 1 Hacer
+						Escribir "--- Evento #", i, " ---";
+						Escribir "Nombre: ", eventos[i];
+						Escribir "Ubicación: ", ubicaciones[i];
+						Escribir "Capacidad máxima: ", capacidades[i];
+						Escribir "";
+					FinPara
+				FinSi
+				
+				Escribir "Presione una tecla para regresar al menú...";
+				Esperar Tecla;
                 
                 
             4:
