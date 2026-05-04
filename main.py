@@ -1,5 +1,40 @@
 # FUNCION 1: CREAR EVENTO
+def crear_evento():
+    print ("\n==============================")
+    print ("         CREAR EVENTO          ")
+    print ("==============================")
 
+
+    if len(eventos) < 10:
+        
+    
+        print ("Nombre del evento:")
+        nombre_evento = input ()
+        eventos.append(nombre_evento)
+    
+        print ("Ubicación del evento:")
+        ubicacion_evento = input ()
+        ubicaciones.append(ubicacion_evento)
+    
+        while True:
+            print ("Capacidad maxima de personas:")
+            capacidad_evento = int(input())
+        
+            if capacidad_evento <= 0:
+                print("Error: la capacidad debe ser mayor que 0")
+            
+            if capacidad_evento > 0:
+                break
+    
+        capacidades.append(capacidad_evento)
+        asistentes.append(0)
+        estados.append(0) # 0 = abierto
+    
+    else:
+        print("¡Error! Ha alcanzado el límite máximo de 10 eventos.")
+    
+    print ("\nEvento registrado con éxito")
+    input ("\nPresione Enter para regresar al menú...")
 
 
 # FUNCION 2: REGISTRAR ASISTENTE (TU PARTE)
@@ -84,7 +119,7 @@ while True:
         continue
     
     if opcion == 1:
-        print("1")
+        crear_evento()
     
     elif opcion == 2:
         registrar_asistente(eventos, capacidades, asistentes, estados)
