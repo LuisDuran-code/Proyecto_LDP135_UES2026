@@ -37,7 +37,7 @@ def crear_evento():
     input ("\nPresione Enter para regresar al menú...")
 
 
-# FUNCION 2: REGISTRAR ASISTENTE (TU PARTE)
+# FUNCION 2: REGISTRAR ASISTENTE
 def registrar_asistente(eventos, capacidades, asistentes, estados):
     if len(eventos) == 0:
         print("No hay eventos disponibles para registrar asistentes.")
