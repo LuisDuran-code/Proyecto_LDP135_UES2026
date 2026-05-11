@@ -1,3 +1,9 @@
+import os
+
+
+def clearConsole():
+    return os.system("cls" if os.name in ("nt", "dos") else "clear")
+
 # FUNCION 1: CREAR EVENTO
 def crear_evento():
     print ("\n==============================")
@@ -38,37 +44,46 @@ def crear_evento():
 
 
 # FUNCION 2: REGISTRAR ASISTENTE
+
+
 def registrar_asistente(eventos, capacidades, asistentes, estados):
+    
     if len(eventos) == 0:
         print("No hay eventos disponibles para registrar asistentes.")
+        input ("\nPresione Enter para regresar al menú...")
         return
     
     print("\nEventos disponibles:")
     for i in range(len(eventos)):
         print(f"{i+1}. {eventos[i]} (Asistentes: {asistentes[i]}/{capacidades[i]}, Estado: {'Abierto' if estados[i] == 0 else 'Cerrado'})")
-    
-    try:
-        seleccion = int(input("Seleccione el número del evento al que desea registrarse: "))
-        if seleccion < 1 or seleccion > len(eventos):
-            print("Número de evento inválido.")
-            return
-    except ValueError:
-        print("Entrada inválida. Por favor, ingrese un número.")
-        return
+    seleccion = 0
+    while True:
+        try:
+            seleccion = int(input("Seleccione el número del evento al que desea registrarse: "))
+            if seleccion < 1 or seleccion > len(eventos):
+                print("Número de evento inválido.")
+            else:
+                break
+        except ValueError:
+            print("Entrada inválida. Por favor, ingrese un número.")
+            
     
     indice_evento = seleccion - 1
     
-    if estados[indice_evento] == 1:
-        print("El evento está cerrado. No se pueden registrar más asistentes.")
-        return
+    if asistentes[indice_evento] < capacidades[indice_evento]:
+        asistentes[indice_evento] += 1
+        print(f"Registro exitoso. Ahora hay {asistentes[indice_evento]} asistentes en el evento '{eventos[indice_evento]}'.")
+        
+        if asistentes[indice_evento] == capacidades[indice_evento]:
+            estados[indice_evento] = 1  # Cambiar estado a cerrado
+            print(f"El evento '{eventos[indice_evento]}' ha alcanzado su capacidad máxima y ahora está cerrado.")
+    else:
+        print(f"Lo siento, el evento '{eventos[indice_evento]}' ya ha alcanzado su capacidad máxima y está cerrado.")
     
-    if asistentes[indice_evento] >= capacidades[indice_evento]:
-        print("El evento ha alcanzado su capacidad máxima. No se pueden registrar más asistentes.")
-        return
-    
-    asistentes[indice_evento] += 1
-    print(f"Registro exitoso. Ahora hay {asistentes[indice_evento]} asistentes en el evento '{eventos[indice_evento]}'.")
 
+    
+
+    input ("\nPresione Enter para regresar al menú...")
 
 
 # FUNCION 3: MOSTRAR EVENTOS
@@ -88,6 +103,7 @@ def mostrar_eventos(eventos, ubicaciones, capacidades, asistentes, estados):
             print("Estado: Abierto")
         else:
             print("Estado: Cerrado")
+    input ("\nPresione Enter para regresar al menú...")
 
 
 # -------------------------------
@@ -103,6 +119,7 @@ estados = []
 opcion = 0  # Variable del menú
 
 while True:
+    clearConsole( )
     print("\n==============================")
     print("   SISTEMA DE EVENTOS")
     print("==============================")
