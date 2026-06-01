@@ -13,7 +13,6 @@ def crear_evento():
 
     if len(eventos) < 10:
         
-    
         print ("Nombre del evento:")
         nombre_evento = input ()
         eventos.append(nombre_evento)
@@ -91,6 +90,7 @@ def mostrar_eventos(eventos, ubicaciones, capacidades, asistentes, estados):
     if len(eventos) == 0:
         print("No hay eventos registrados.")
         return
+    
     
     for i in range(len(eventos)):
         print(f"\n--- Evento #{i+1} ---")
