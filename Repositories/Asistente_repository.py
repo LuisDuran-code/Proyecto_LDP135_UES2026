@@ -8,7 +8,7 @@ class AsistenteRepository:
 
     def obtener_todos(self):
         return self.asistentes
-    
+
     def buscar_por_nombre(self, nombre):
 
         encontrados = []
@@ -19,3 +19,4 @@ class AsistenteRepository:
                 encontrados.append(asistente)
 
         return encontrados
+    
