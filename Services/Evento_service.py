@@ -5,11 +5,17 @@ class EventoService:
 
     def __init__(self, repositorio):
         self.repositorio = repositorio
-        self.siguiente_id = 1
+        # Inicializar siguiente_id basándose en los eventos existentes
+        eventos = self.repositorio.obtener_todos()
+        if eventos:
+            # Encontrar el ID máximo y sumar 1
+            max_id = max(evento.id_evento for evento in eventos)
+            self.siguiente_id = max_id + 1
+        else:
+            self.siguiente_id = 1
 
 
     def cancelar_evento(self, id_evento):
-
         evento = self.repositorio.buscar_por_id(id_evento)
 
         if evento:
@@ -56,11 +62,10 @@ class EventoService:
         if self.repositorio.buscar_por_nombre(nombre):
             return False
 
-        id_evento = self.siguiente_id
-        self.siguiente_id += 1
+        
 
         evento = Evento(
-            id_evento,
+            self.siguiente_id,
             nombre,
             ubicacion,
             fecha,
@@ -69,7 +74,7 @@ class EventoService:
             edad_minima,
             categoria,
             organizador
-    )
+        )
 
         self.repositorio.agregar(evento)
 
@@ -149,4 +154,23 @@ class EventoService:
         elif evento.estado != "Cancelado":
             evento.estado = "Abierto"
 
-        return True
+
+    
+
+
+    
+
+    
+
+
+ 
+
+
+   
+
+
+    
+
+    
+
+

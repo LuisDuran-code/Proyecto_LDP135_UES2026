@@ -1,3 +1,6 @@
+import os
+from utils.Tools import limpiar_pantalla
+
 class MenuAsistente:
 
     def __init__(self, asistente_service, evento_service):
@@ -8,6 +11,7 @@ class MenuAsistente:
     def mostrar_menu(self):
 
         while True:
+            limpiar_pantalla()
 
             print("\n=================================")
             print("    GESTIÓN DE ASISTENTES")
@@ -20,14 +24,24 @@ class MenuAsistente:
 
             opcion = input("Seleccione una opción: ")
 
+
             if opcion == "1":
-                self.registrar_asistente()
+                try:
+                    self.registrar_asistente_interactivo()
+                except Exception as e:
+                    print(f"Error: {e}")
 
             elif opcion == "2":
-                self.mostrar_asistentes()
+                try:
+                    self.mostrar_asistentes_interactivo()
+                except Exception as e:
+                    print(f"Error: {e}")
 
             elif opcion == "3":
-                self.buscar_asistente()
+                try:
+                    self.buscar_asistente_interactivo()
+                except Exception as e:
+                    print(f"Error: {e}")
 
             elif opcion == "4":
                 break
@@ -35,113 +49,97 @@ class MenuAsistente:
             else:
                 print("Opción inválida.")
 
-    # =====================================
-    # REGISTRAR ASISTENTE
-    # =====================================
+    def registrar_asistente_interactivo(self):
+        try:
+            eventos = self.evento_service.obtener_eventos()
+            if not eventos:
+                raise ValueError("No hay eventos registrados")
 
-    def registrar_asistente(self):
+            print("\nEventos disponibles:")
+            for i, evento in enumerate(eventos):
+                print(f"{i + 1}. {evento.nombre} - Estado: {evento.estado}")
 
-        eventos = self.evento_service.obtener_eventos()
+            indice = int(input("\nSeleccione el número del evento: ")) - 1
+            if indice < 0 or indice >= len(eventos):
+                raise ValueError("Evento inválido")
 
-        if len(eventos) == 0:
-            print("\nNo hay eventos registrados.")
+            evento = eventos[indice]
+            if evento.estado == "Lleno":
+                raise ValueError("El evento está lleno")
+            if evento.estado == "Cancelado":
+                raise ValueError("El evento está cancelado")
+
+            nombre = input("Nombre del asistente: ")
+            edad = int(input("Edad: "))
+            correo = input("Correo electrónico: ")
+
+            asistente = self.asistente_service.registrar_asistente(nombre, edad, correo, evento)
+            print(f"\nAsistente registrado: {asistente}")
+            if evento.estado == "Lleno":
+                print("El evento alcanzó su capacidad máxima")
+
+        except ValueError as e:
+            print(f"Error: {e}")
+        except Exception as e:
+            print(f"Error: {e}")
+        finally:
+            input("\nPresione ENTER para continuar...")
+
+    def mostrar_asistentes_interactivo(self):
+        try:
+            eventos = self.evento_service.obtener_eventos()
+            if not eventos:
+                raise ValueError("No hay eventos registrados")
+        except ValueError as e:
+            print(f"Error: {e}")
+            print("Presione cualquier tecla para continuar...")
+            input()
             return
 
         print("\nEventos disponibles:")
-
         for i, evento in enumerate(eventos):
-
-            print(
-                f"{i + 1}. {evento.nombre} "
-                f"- Estado: {evento.estado}"
-            )
+            print(f"{i + 1}. {evento.nombre} - Estado: {evento.estado}")
 
         try:
-
-            indice = int(
-                input("\nSeleccione el número del evento: ")
-            ) - 1
-
-            if indice < 0 or indice >= len(eventos):
-
-                print("Evento inválido.")
-                return
-
+            indice = int(input("\nSeleccione el número del evento: ")) - 1
         except ValueError:
-
             print("Debe ingresar un número.")
+            print("Presione cualquier tecla para continuar...")
+            input()
+            return
+        if indice < 0 or indice >= len(eventos):
+            print("Error: Evento inválido")
+            print("Presione cualquier tecla para continuar...")
+            input()
             return
 
         evento = eventos[indice]
 
-        nombre = input("Nombre del asistente: ")
-
-        try:
-
-            edad = int(input("Edad: "))
-
-        except ValueError:
-
-            print("La edad debe ser numérica.")
+        if not evento.asistentes:
+            print(f"\nEl evento '{evento.nombre}' no tiene asistentes registrados.")
+            print("Presione cualquier tecla para continuar...")
+            input()
             return
 
-        correo = input("Correo electrónico: ")
-
-        try:
-
-            self.asistente_service.registrar_asistente(
-                nombre,
-                edad,
-                correo,
-                evento
-            )
-
-            print("\nAsistente registrado correctamente.")
-
-        except ValueError as error:
-
-            print(f"\nError: {error}")
-
-    # =====================================
-    # MOSTRAR ASISTENTES
-    # =====================================
-
-    def mostrar_asistentes(self):
-
-        asistentes = self.asistente_service.mostrar_asistentes()
-
-        if len(asistentes) == 0:
-
-            print("\nNo hay asistentes registrados.")
-            return
-
-        print("\n===== LISTA DE ASISTENTES =====")
-
-        for asistente in asistentes:
-
+        print(f"\nAsistentes registrados para el evento '{evento.nombre}':")
+        asistesntes = self.asistente_service.mostrar_asistentes()
+        for asistente in asistesntes:
             print(asistente)
 
-    # =====================================
-    # BUSCAR ASISTENTE
-    # =====================================
+        print("Presione cualquier tecla para continuar...")
+        input()
 
-    def buscar_asistente(self):
-
-        nombre = input(
-            "\nIngrese el nombre del asistente: "
-        )
-
-        resultados = self.asistente_service.buscar_asistente(
-            nombre
-        )
-
-        if len(resultados) == 0:
-
-            print("\nNo se encontraron coincidencias.")
+    #Completado ya no tocar
+    def buscar_asistente_interactivo(self):
+        nombre = input("Nombre a buscar: ")
+        encontrados = self.asistente_service.buscar_asistente(nombre)
+        if not encontrados:
+            print("No se encontraron asistentes.")
+            print("Presione cualquier tecla para continuar...")
+            input()
             return
-
-        print("\n===== RESULTADOS =====")
-
-        for asistente in resultados:
-
-            print(asistente)
+        print("Resultados:")
+        for a in encontrados:
+            print(a)
+        print("Presione cualquier tecla para continuar...")
+        input()
