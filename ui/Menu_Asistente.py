@@ -122,8 +122,8 @@ class MenuAsistente:
             return
 
         print(f"\nAsistentes registrados para el evento '{evento.nombre}':")
-        asistesntes = self.asistente_service.mostrar_asistentes()
-        for asistente in asistesntes:
+        asistentes = evento.asistentes
+        for asistente in asistentes:
             print(asistente)
 
         print("Presione cualquier tecla para continuar...")
